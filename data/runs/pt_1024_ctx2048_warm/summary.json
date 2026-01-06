@@ -1,0 +1,22 @@
+{
+  "model_path": "models\\tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf",
+  "model_sha1": "bf9469e1a4e5771caebf1ad3293658630bca5cd4",
+  "prompt_label": "pt_1024",
+  "prompt_tokens": 1024,
+  "n_ctx": 2048,
+  "mode": "warm",
+  "n_threads": 8,
+  "max_tokens": 128,
+  "ttft_trigger_chars": 8,
+  "runs": 5,
+  "mean_ttft_s": 0.03796844482421875,
+  "mean_decode_tok_s": 28.626904305175934,
+  "mean_total_s": 4.137538099288941,
+  "mean_rss_peak_mb": 1358.4646144,
+  "status": "ok",
+  "error": "",
+  "platform": "Windows-10-10.0.26100-SP0",
+  "python": "3.11.14 | CPython",
+  "cpu_count_logical": 10,
+  "machine": "AMD64"
+}

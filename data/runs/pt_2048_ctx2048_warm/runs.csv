@@ -1,0 +1,6 @@
+ts,run_idx,status,error,prompt_label,prompt_tokens,n_ctx,mode,n_threads,max_tokens_req,max_tokens_eff,ttft_s,decode_s,decode_tok_s,total_s,rss_before_mb,rss_after_mb,rss_peak_mb,mem_delta_mb
+2026-01-06T14:30:46,0,skipped_ctx_too_small,prompt_tokens=2048 leaves no room in n_ctx=2048 (safety=4),pt_2048,2048,2048,warm,8,128,0,,,,,1081.585664,1081.585664,1081.585664,0.0
+2026-01-06T14:30:46,1,skipped_ctx_too_small,prompt_tokens=2048 leaves no room in n_ctx=2048 (safety=4),pt_2048,2048,2048,warm,8,128,0,,,,,1081.585664,1081.585664,1081.585664,0.0
+2026-01-06T14:30:46,2,skipped_ctx_too_small,prompt_tokens=2048 leaves no room in n_ctx=2048 (safety=4),pt_2048,2048,2048,warm,8,128,0,,,,,1081.585664,1081.585664,1081.585664,0.0
+2026-01-06T14:30:46,3,skipped_ctx_too_small,prompt_tokens=2048 leaves no room in n_ctx=2048 (safety=4),pt_2048,2048,2048,warm,8,128,0,,,,,1081.585664,1081.585664,1081.585664,0.0
+2026-01-06T14:30:46,4,skipped_ctx_too_small,prompt_tokens=2048 leaves no room in n_ctx=2048 (safety=4),pt_2048,2048,2048,warm,8,128,0,,,,,1081.585664,1081.585664,1081.585664,0.0

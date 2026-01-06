@@ -1,83 +1,63 @@
 # GreenAttentionBench
 
-**Green Attention Bench** is a lightweight benchmarking suite for **energy-, latency-, and memory-aware evaluation of long-context LLM inference**, with pluggable “efficient attention” backends.
+GreenAttentionBench is a lightweight benchmarking suite for **long-context LLM inference** on consumer hardware.  
+It focuses on *practical systems metrics* rather than model quality.
 
-The goal is to provide a **clean, reproducible, systems-style benchmark** that compares attention mechanisms apples-to-apples and surfaces *when* and *why* different approaches win or fail at long context lengths.
-
----
-
-## Motivation
-
-Long-context inference stresses modern hardware along multiple axes: compute, memory bandwidth, capacity, and power. While many “efficient attention” methods exist, it is often unclear:
-
-- Which method actually improves **end-to-end inference efficiency**
-- Under what **context lengths and hardware constraints**
-- And what the **dominant bottleneck** is (compute vs. memory vs. bandwidth)
-
-green-attention-bench is designed to answer those questions in a controlled, practical way.
+The goal is simple: understand how **context length** and **prompt size** affect
+latency, throughput, and memory during inference.
 
 ---
 
-## What This Repository Contains
+## What it measures
 
-### 1. Standardized Inference Benchmark Harness
-A unified runner that measures inference performance across:
-- Multiple models
-- Multiple context lengths
-- Multiple attention backends
-- Consistent prompts and tasks
+For a given model, prompt size, and context window:
 
-### 2. Models
-- Small open LLMs (≈1B–3B parameters) that can run locally
-- Optional medium-scale model if hardware permits
+- **TTFT (Time-to-First-Token)**
+- **Decode throughput (tokens/sec)**
+- **Peak memory usage (RSS)**
+- Warm vs cold inference behavior
 
-### 3. Tasks
-- Long-context summarization
-- Retrieval-style QA
-- Synthetic long-sequence perplexity proxy
-
-### 4. Attention Backends (Apples-to-Apples)
-- Baseline PyTorch SDPA attention  
-- FlashAttention / xFormers
-- At least one long-context or “efficient attention” alternative  
-  (e.g., linear attention family or state-space models)
-
-### 5. Metrics Collected
-- **Throughput:** tokens / second  
-- **Latency:** time per generated token  
-- **Memory:** peak VRAM / RAM usage  
-- **Energy proxy:** GPU power draw via `nvidia-smi`
+Results are aggregated into a single CSV and plotted automatically.
 
 ---
 
-## Minimal but High-Value Scope
+## How it works
 
-The core benchmark targets:
-- **3 context lengths** (e.g., 2k, 8k, 32k)
-- **2 models**
-- **2–3 attention implementations**
-- **4 core metrics** (throughput, latency, memory, energy)
-
-### Optional Systems Twist
-> If context length > X or available memory < Y, automatically switch attention backend or chunking strategy.
-
-This mirrors real-world system decision layers used in large-scale inference.
+- Uses `llama.cpp` via `llama-cpp-python`
+- Runs controlled matrix sweeps over:
+  - prompt size
+  - context length
+  - inference mode
+- Appends one summary row per condition to `results_summary.csv`
+- Generates plots for quick inspection
 
 ---
 
-## Why This Project Exists
+## Key findings
 
-The core claim this repository is meant to support:
-> *I can design and run reproducible experiments that quantify long-context efficiency tradeoffs (throughput, latency, memory, energy), and turn those results into actionable system choices.*
+- **Peak memory scales linearly with context length**, consistent with KV-cache growth
+- **TTFT is not strictly monotonic**: small prompts can see lower TTFT at larger contexts due to allocator and cache effects
+- **Decode throughput decreases for large prompts** as context grows, revealing a clear latency–memory–throughput tradeoff
+- Long-context inference on consumer CPUs is feasible, but quickly becomes memory-bound
+
+These results reflect runtime behavior.
 
 ---
 
-## Status
+## Why this exists
 
-**Early development / starter scaffold**
+Most LLM benchmarks focus on accuracy or GPU performance.  
+This project focuses on **systems behavior**:
 
-Initial focus:
-- Define benchmark interfaces
-- Implement baseline SDPA measurement
-- Add one efficient attention backend
-- Validate metrics collection
+What actually happens when you push long contexts on real hardware?
+
+## Plots
+
+### Time to First Token vs Context Length
+![TTFT vs Context Length](data/plots/ttft_vs_ctx_mode_warm.png)
+
+### Decode Throughput vs Context Length
+![Decode Throughput vs Context Length](data/plots/decode_tok_s_vs_ctx_mode_warm.png)
+
+### Peak Memory vs Context Length
+![Peak RSS vs Context Length](data/plots/rss_peak_mb_vs_ctx_mode_warm.png)
